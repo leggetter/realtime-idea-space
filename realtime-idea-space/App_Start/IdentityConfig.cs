@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using realtime_idea_space.Models;
+using System.Web.Configuration;
+using System.Diagnostics;
 
 namespace realtime_idea_space
 {
@@ -27,7 +29,15 @@ namespace realtime_idea_space
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your SMS service here to send a text message.
+            var result = Nexmo.Api.SMS.Send(new Nexmo.Api.SMS.SMSRequest
+            {
+                from = WebConfigurationManager.AppSettings["NexmoFromNumber"],
+                to = message.Destination,
+                text = message.Body + " [Powered by Nexmo]"
+            });
+
+            Trace.TraceInformation(result.message_count);
+
             return Task.FromResult(0);
         }
     }

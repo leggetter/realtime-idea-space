@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using realtime_idea_space.Models;
+using System.Diagnostics;
 
 namespace realtime_idea_space.Controllers
 {
@@ -97,10 +98,11 @@ namespace realtime_idea_space.Controllers
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
             // Require that the user has already logged in via username/password or external login
-            if (!await SignInManager.HasBeenVerifiedAsync())
+            if (!await SignInManager.HasBeenVerifiedAsync() && Session["UserId"] == null)
             {
                 return View("Error");
             }
+            Trace.TraceInformation("2FACode: {0}", Session["2FACode"]);
             return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
@@ -114,6 +116,24 @@ namespace realtime_idea_space.Controllers
             if (!ModelState.IsValid)
             {
                 return View(model);
+            }
+
+            if(Session["UserId"] != null)
+            {
+                var user = UserManager.FindById((string)Session["UserId"]);
+                var verified = await UserManager.VerifyChangePhoneNumberTokenAsync(user.Id, model.Code, user.PhoneNumber);
+                if(verified)
+                {
+                    user.PhoneNumberConfirmed = true;
+                    SignInManager.SignIn(user, false, false);
+
+                    return RedirectToLocal(model.ReturnUrl);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid code.");
+                    return View(model);
+                }
             }
 
             // The following code protects for brute force attacks against the two factor codes. 
@@ -151,19 +171,33 @@ namespace realtime_idea_space.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    TwoFactorEnabled = true,
+                    PhoneNumberConfirmed = false
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    var code = await UserManager.GenerateChangePhoneNumberTokenAsync(user.Id, user.PhoneNumber);
+                    UserManager.SendSms(user.Id, "Security code: " + code);
+
+                    Session["2FACode"] = code;
+                    Session["UserId"] = user.Id;
+
+                    var returnUrl = Url.Action("Index", "Home");
+                    return RedirectToAction("VerifyCode", new { Provider = "Phone Code", ReturnUrl = returnUrl, RememberMe = false });
+
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    //return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }
