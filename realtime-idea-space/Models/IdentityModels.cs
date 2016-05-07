@@ -29,5 +29,7 @@ namespace realtime_idea_space.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<realtime_idea_space.Models.IdeaModel> IdeaModels { get; set; }
     }
 }

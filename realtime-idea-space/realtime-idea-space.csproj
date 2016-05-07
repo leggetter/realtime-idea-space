@@ -202,11 +202,26 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IdeaController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605061745366_InitialCreate.cs" />
+    <Compile Include="Migrations\201605061745366_InitialCreate.Designer.cs">
+      <DependentUpon>201605061745366_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605071153475_IdeaModel.cs" />
+    <Compile Include="Migrations\201605071153475_IdeaModel.Designer.cs">
+      <DependentUpon>201605071153475_IdeaModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605071315069_IdeaModel.CreatedByUserId.cs" />
+    <Compile Include="Migrations\201605071315069_IdeaModel.CreatedByUserId.Designer.cs">
+      <DependentUpon>201605071315069_IdeaModel.CreatedByUserId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\IdeaModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -272,6 +287,11 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Idea\Create.cshtml" />
+    <Content Include="Views\Idea\Delete.cshtml" />
+    <Content Include="Views\Idea\Details.cshtml" />
+    <Content Include="Views\Idea\Edit.cshtml" />
+    <Content Include="Views\Idea\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -283,6 +303,17 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201605061745366_InitialCreate.resx">
+      <DependentUpon>201605061745366_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605071153475_IdeaModel.resx">
+      <DependentUpon>201605071153475_IdeaModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605071315069_IdeaModel.CreatedByUserId.resx">
+      <DependentUpon>201605071315069_IdeaModel.CreatedByUserId.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -298,7 +329,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55401</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
