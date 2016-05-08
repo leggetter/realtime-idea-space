@@ -55,6 +55,9 @@ namespace realtime_idea_space.Controllers
                 ideaComment.Id = Guid.NewGuid();
                 db.IdeaComments.Add(ideaComment);
                 db.SaveChanges();
+
+                Hubs.CommentHub.NewCommentAdded(ideaComment);
+
                 return RedirectToAction("Details", "Idea", new { Id = ideaComment.IdeaModelId });
             }
 
