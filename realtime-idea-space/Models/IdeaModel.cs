@@ -23,6 +23,6 @@ namespace realtime_idea_space.Models
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
-        public virtual ICollection<IdeaComment> Comments { get; set; }
+        public virtual ICollection<CommentModel> Comments { get; set; }
     }
 }

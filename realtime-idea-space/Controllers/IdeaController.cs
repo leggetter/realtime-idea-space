@@ -117,7 +117,7 @@ namespace realtime_idea_space.Controllers
             return RedirectToAction("Index");
         }
 
-        public PartialViewResult CreateComment([Bind(Include = "IdeaModelId")] IdeaComment ideaComment)
+        public PartialViewResult CreateComment([Bind(Include = "IdeaModelId")] CommentModel ideaComment)
         {
             ideaComment.CommentByUserId = User.Identity.GetUserId();
             return PartialView("CreateComment", ideaComment);

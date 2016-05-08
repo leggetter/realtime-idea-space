@@ -8,24 +8,24 @@ using System.Web.Mvc;
 
 namespace realtime_idea_space.Controllers
 {
-    public class IdeaCommentsController : Controller
+    public class CommentController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: IdeaComments
+        // GET: Comment
         public ActionResult Index()
         {
             return View(db.IdeaComments.ToList());
         }
 
-        // GET: IdeaComments/Details/5
+        // GET: Comment/Details/5
         public ActionResult Details(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IdeaComment ideaComment = db.IdeaComments.Find(id);
+            CommentModel ideaComment = db.IdeaComments.Find(id);
             if (ideaComment == null)
             {
                 return HttpNotFound();
@@ -34,16 +34,16 @@ namespace realtime_idea_space.Controllers
         }
 
         // Used by Create
-        public PartialViewResult CreateComment([Bind(Include = "IdeaModelId")] IdeaComment ideaComment)
+        public PartialViewResult CreateComment([Bind(Include = "IdeaModelId")] CommentModel ideaComment)
         {
             ideaComment.CommentByUserId = User.Identity.GetUserId();
             return PartialView("CreateComment", ideaComment);
         }
 
-        // POST: IdeaComments/Create
+        // POST: Comment/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,IdeaModelId,Text,Created,CommentByUserId")] IdeaComment ideaComment)
+        public ActionResult Create([Bind(Include = "Id,IdeaModelId,Text,Created,CommentByUserId")] CommentModel ideaComment)
         {
             if(ideaComment.CommentByUserId != User.Identity.GetUserId())
             {
@@ -64,14 +64,14 @@ namespace realtime_idea_space.Controllers
             return View("Create", ideaComment);
         }
 
-        // GET: IdeaComments/Edit/5
+        // GET: Comment/Edit/5
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IdeaComment ideaComment = db.IdeaComments.Find(id);
+            CommentModel ideaComment = db.IdeaComments.Find(id);
             if (ideaComment == null)
             {
                 return HttpNotFound();
@@ -79,12 +79,12 @@ namespace realtime_idea_space.Controllers
             return View(ideaComment);
         }
 
-        // POST: IdeaComments/Edit/5
+        // POST: Comment/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,IdeaModelId,Text,Created,CommentByUserId")] IdeaComment ideaComment)
+        public ActionResult Edit([Bind(Include = "Id,IdeaModelId,Text,Created,CommentByUserId")] CommentModel ideaComment)
         {
             if (ModelState.IsValid)
             {
@@ -95,14 +95,14 @@ namespace realtime_idea_space.Controllers
             return View(ideaComment);
         }
 
-        // GET: IdeaComments/Delete/5
+        // GET: Comment/Delete/5
         public ActionResult Delete(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IdeaComment ideaComment = db.IdeaComments.Find(id);
+            CommentModel ideaComment = db.IdeaComments.Find(id);
             if (ideaComment == null)
             {
                 return HttpNotFound();
@@ -110,12 +110,12 @@ namespace realtime_idea_space.Controllers
             return View(ideaComment);
         }
 
-        // POST: IdeaComments/Delete/5
+        // POST: Comment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            IdeaComment ideaComment = db.IdeaComments.Find(id);
+            CommentModel ideaComment = db.IdeaComments.Find(id);
             db.IdeaComments.Remove(ideaComment);
             db.SaveChanges();
             return RedirectToAction("Index");

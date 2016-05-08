@@ -6,9 +6,9 @@ using System.Web;
 
 namespace realtime_idea_space.Models
 {
-    public class IdeaComment
+    public class CommentModel
     {
-        public IdeaComment() { Id = Guid.NewGuid(); Created = DateTime.Now; }
+        public CommentModel() { Id = Guid.NewGuid(); Created = DateTime.Now; }
 
         public Guid Id { get; set; }
 

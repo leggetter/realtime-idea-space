@@ -32,6 +32,6 @@ namespace realtime_idea_space.Models
 
         public System.Data.Entity.DbSet<realtime_idea_space.Models.IdeaModel> IdeaModels { get; set; }
 
-        public System.Data.Entity.DbSet<realtime_idea_space.Models.IdeaComment> IdeaComments { get; set; }
+        public System.Data.Entity.DbSet<realtime_idea_space.Models.CommentModel> IdeaComments { get; set; }
     }
 }
