@@ -3,15 +3,22 @@
 @using Microsoft.AspNet.Identity;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Ideas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>
+    Real-Time Ideas
+    <small>
+        (
+        @Html.ActionLink("Share an Idea", "Create")
+        )
+    </small>
+</h2>
 
 <p>
     @if (User.Identity.IsAuthenticated) {
-        @Html.ActionLink("Create New", "Create")
+        
     }
 </p>
 <table class="table">
@@ -22,6 +29,8 @@
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
+        <th></th>
+        <th></th>
         <th></th>
     </tr>
 
@@ -34,14 +43,19 @@
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
-            @if (User.Identity.GetUserId() == item.CreatedByUserId) {
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-            }
-            @Html.ActionLink("Details", "Details", new { id=item.Id })
+            @Html.ActionLink("More...", "Details", new { id = item.Id })
+        </td>
+        <td>
             @if (User.Identity.GetUserId() == item.CreatedByUserId)
             {
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
             }
+        </td>
+        <td>
+             @if (User.Identity.GetUserId() == item.CreatedByUserId)
+             {
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+             }
         </td>
     </tr>
 }

@@ -22,3 +22,8 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.idea-comment {
+    border-bottom: 1px solid #eeeeee;
+    margin-bottom: 5px;
+}

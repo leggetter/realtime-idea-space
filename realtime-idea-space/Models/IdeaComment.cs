@@ -16,6 +16,7 @@ namespace realtime_idea_space.Models
 
         [StringLength(2000), MinLength(20), Required]
         [DataType(DataType.MultilineText)]
+        [Display(Name ="Leave a comment")]
         public string Text { get; set; }
 
         [ScaffoldColumn(false)]

@@ -6,19 +6,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>
+    @Html.ActionLink("Ideas", "Index")
+    <span> &gt; </span>
+    @Html.DisplayFor(model => model.Title)
+    @if (User.Identity.GetUserId() == Model.CreatedByUserId)
+    {
+        <small>
+            (
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+            )
+        </small>
+    }
+</h2>
+
+<hr />
 
 <div>
-    <h4>IdeaModel</h4>
-    <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Description)
@@ -30,24 +35,30 @@
 
     </dl>
 </div>
-<p>
-    @if (User.Identity.GetUserId() == Model.CreatedByUserId)
-    {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
-    }
-    @Html.ActionLink("Back to List", "Index")
-</p>
 
-<h2>Comments (@Model.Comments.Count)</h2>
+<hr />
 
-@foreach (var comment in Model.Comments)
-{
-    <div>
-        <span>@comment.Created</span>
-        <p>
-            @comment.Text
-        </p>
-    </div>
-}
+<div>
+    <dl class="dl-horizontal">
+
+        <dt>
+            Comments (@Model.Comments.Count)
+        </dt>
+        <dd>
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="idea-comment">
+                    <span>@comment.Created</span>
+                    <p>
+                        @comment.Text
+                    </p>
+                </div>
+            }
+        </dd>
+    </dl>
+
+</div> 
+
+<hr />
 
 @{Html.RenderAction("CreateComment", new { IdeaModelId = Model.Id, CommentByUserId = User.Identity.GetUserId() });}
