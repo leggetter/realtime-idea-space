@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using Microsoft.AspNet.Identity;
+using realtime_idea_space.Models;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using realtime_idea_space.Models;
-using Microsoft.AspNet.Identity;
 
 namespace realtime_idea_space.Controllers
 {

@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNet.Identity;
 using realtime_idea_space.Models;
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace realtime_idea_space.Controllers
@@ -36,7 +33,7 @@ namespace realtime_idea_space.Controllers
             return View(ideaComment);
         }
 
-        // 
+        // Used by Create
         public PartialViewResult CreateComment([Bind(Include = "IdeaModelId")] IdeaComment ideaComment)
         {
             ideaComment.CommentByUserId = User.Identity.GetUserId();
@@ -44,15 +41,12 @@ namespace realtime_idea_space.Controllers
         }
 
         // POST: IdeaComments/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,IdeaModelId,Text,Created,CommentByUserId")] IdeaComment ideaComment)
         {
             if(ideaComment.CommentByUserId != User.Identity.GetUserId())
             {
-                // Attempt to change user
                 ModelState.AddModelError("CommentByUserId", "The User Id did not match the logged in user");
             }
 
