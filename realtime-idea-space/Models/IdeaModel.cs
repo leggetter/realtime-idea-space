@@ -24,5 +24,7 @@ namespace realtime_idea_space.Models
         [StringLength(2000), MinLength(20), Required]
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
+
+        public virtual ICollection<IdeaComment> Comments { get; set; }
     }
 }

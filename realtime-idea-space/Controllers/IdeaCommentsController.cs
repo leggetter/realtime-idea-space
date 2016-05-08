@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using realtime_idea_space.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -6,124 +8,120 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using realtime_idea_space.Models;
-using Microsoft.AspNet.Identity;
 
 namespace realtime_idea_space.Controllers
 {
-    [Authorize]
-    public class IdeaController : Controller
+    public class IdeaCommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Idea
-        [AllowAnonymous]
+        // GET: IdeaComments
         public ActionResult Index()
         {
-            return View(db.IdeaModels.ToList());
+            return View(db.IdeaComments.ToList());
         }
 
-        // GET: Idea/Details/5
-        [AllowAnonymous]
+        // GET: IdeaComments/Details/5
         public ActionResult Details(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IdeaModel ideaModel = db.IdeaModels.Find(id);
-            if (ideaModel == null)
+            IdeaComment ideaComment = db.IdeaComments.Find(id);
+            if (ideaComment == null)
             {
                 return HttpNotFound();
             }
-            return View(ideaModel);
+            return View(ideaComment);
         }
 
-        // GET: Idea/Create
-        public ActionResult Create()
+        // 
+        public PartialViewResult CreateComment([Bind(Include = "IdeaModelId")] IdeaComment ideaComment)
         {
-            return View();
+            ideaComment.CommentByUserId = User.Identity.GetUserId();
+            return PartialView("CreateComment", ideaComment);
         }
 
-        // POST: Idea/Create
+        // POST: IdeaComments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Created,Description,CreatedByUserId")] IdeaModel ideaModel)
+        public ActionResult Create([Bind(Include = "Id,IdeaModelId,Text,Created,CommentByUserId")] IdeaComment ideaComment)
         {
-            if (ModelState.IsValid)
+            if(ideaComment.CommentByUserId != User.Identity.GetUserId())
             {
-                ideaModel.Id = Guid.NewGuid();
-                db.IdeaModels.Add(ideaModel);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                // Attempt to change user
+                ModelState.AddModelError("CommentByUserId", "The User Id did not match the logged in user");
             }
 
-            return View(ideaModel);
+            if (ModelState.IsValid)
+            {
+                ideaComment.Id = Guid.NewGuid();
+                db.IdeaComments.Add(ideaComment);
+                db.SaveChanges();
+                return RedirectToAction("Details", "Idea", new { Id = ideaComment.IdeaModelId });
+            }
+
+            return View("Create", ideaComment);
         }
 
-        // GET: Idea/Edit/5
+        // GET: IdeaComments/Edit/5
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IdeaModel ideaModel = db.IdeaModels.Find(id);
-            if (ideaModel == null)
+            IdeaComment ideaComment = db.IdeaComments.Find(id);
+            if (ideaComment == null)
             {
                 return HttpNotFound();
             }
-            return View(ideaModel);
+            return View(ideaComment);
         }
 
-        // POST: Idea/Edit/5
+        // POST: IdeaComments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Created,Description")] IdeaModel ideaModel)
+        public ActionResult Edit([Bind(Include = "Id,IdeaModelId,Text,Created,CommentByUserId")] IdeaComment ideaComment)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(ideaModel).State = EntityState.Modified;
+                db.Entry(ideaComment).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(ideaModel);
+            return View(ideaComment);
         }
 
-        // GET: Idea/Delete/5
+        // GET: IdeaComments/Delete/5
         public ActionResult Delete(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IdeaModel ideaModel = db.IdeaModels.Find(id);
-            if (ideaModel == null)
+            IdeaComment ideaComment = db.IdeaComments.Find(id);
+            if (ideaComment == null)
             {
                 return HttpNotFound();
             }
-            return View(ideaModel);
+            return View(ideaComment);
         }
 
-        // POST: Idea/Delete/5
+        // POST: IdeaComments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            IdeaModel ideaModel = db.IdeaModels.Find(id);
-            db.IdeaModels.Remove(ideaModel);
+            IdeaComment ideaComment = db.IdeaComments.Find(id);
+            db.IdeaComments.Remove(ideaComment);
             db.SaveChanges();
             return RedirectToAction("Index");
-        }
-
-        public PartialViewResult CreateComment([Bind(Include = "IdeaModelId")] IdeaComment ideaComment)
-        {
-            ideaComment.CommentByUserId = User.Identity.GetUserId();
-            return PartialView("CreateComment", ideaComment);
         }
 
         protected override void Dispose(bool disposing)

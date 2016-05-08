@@ -219,8 +219,22 @@
     <Compile Include="Migrations\201605071315069_IdeaModel.CreatedByUserId.Designer.cs">
       <DependentUpon>201605071315069_IdeaModel.CreatedByUserId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605071447135_IdeaComment.cs" />
+    <Compile Include="Migrations\201605071447135_IdeaComment.Designer.cs">
+      <DependentUpon>201605071447135_IdeaComment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605071448307_IdeaModel.Comments.cs" />
+    <Compile Include="Migrations\201605071448307_IdeaModel.Comments.Designer.cs">
+      <DependentUpon>201605071448307_IdeaModel.Comments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605071602232_IdeaComment.IdeaModelId.cs" />
+    <Compile Include="Migrations\201605071602232_IdeaComment.IdeaModelId.Designer.cs">
+      <DependentUpon>201605071602232_IdeaComment.IdeaModelId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\IdeaComment.cs" />
+    <Compile Include="Controllers\IdeaCommentsController.cs" />
     <Compile Include="Models\IdeaModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -292,6 +306,12 @@
     <Content Include="Views\Idea\Details.cshtml" />
     <Content Include="Views\Idea\Edit.cshtml" />
     <Content Include="Views\Idea\Index.cshtml" />
+    <Content Include="Views\IdeaComments\Create.cshtml" />
+    <Content Include="Views\IdeaComments\Delete.cshtml" />
+    <Content Include="Views\IdeaComments\Details.cshtml" />
+    <Content Include="Views\IdeaComments\Edit.cshtml" />
+    <Content Include="Views\IdeaComments\Index.cshtml" />
+    <Content Include="Views\Shared\CreateComment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -313,6 +333,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605071315069_IdeaModel.CreatedByUserId.resx">
       <DependentUpon>201605071315069_IdeaModel.CreatedByUserId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605071447135_IdeaComment.resx">
+      <DependentUpon>201605071447135_IdeaComment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605071448307_IdeaModel.Comments.resx">
+      <DependentUpon>201605071448307_IdeaModel.Comments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605071602232_IdeaComment.IdeaModelId.resx">
+      <DependentUpon>201605071602232_IdeaComment.IdeaModelId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -9,7 +9,8 @@ namespace realtime_idea_space.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(realtime_idea_space.Models.ApplicationDbContext context)

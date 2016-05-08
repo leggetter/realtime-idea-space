@@ -37,3 +37,17 @@
     }
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+<h2>Comments (@Model.Comments.Count)</h2>
+
+@foreach (var comment in Model.Comments)
+{
+    <div>
+        <span>@comment.Created</span>
+        <p>
+            @comment.Text
+        </p>
+    </div>
+}
+
+@{Html.RenderAction("CreateComment", new { IdeaModelId = Model.Id, CommentByUserId = User.Identity.GetUserId() });}
