@@ -73,7 +73,7 @@ namespace realtime_idea_space.Controllers
 
                 db.IdeaModels.Add(ideaModel);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { Id = ideaModel.Id });
             }
 
             return View(ideaModel);
