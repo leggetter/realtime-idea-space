@@ -10,7 +10,10 @@
         @Html.HiddenFor(model => model.CommentByUserId)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Text, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="control-label col-md-2">
+                @Html.LabelFor(model => model.Text)
+                <div>Or comment by SMS: @Model.ParentIdeaModel.CommentPhoneNumber</div>
+            </div>
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Text, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })

@@ -4,6 +4,7 @@ using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace realtime_idea_space.Controllers
@@ -52,6 +53,24 @@ namespace realtime_idea_space.Controllers
             if (ModelState.IsValid)
             {
                 ideaModel.Id = Guid.NewGuid();
+
+                var countryCode = WebConfigurationManager.AppSettings["Nexmo.BuyNumberCountry"] ?? "GB";
+
+                var numberSearchResult = Nexmo.Api.Number.Search(new Nexmo.Api.Number.SearchRequest{
+                    country = countryCode,
+                    features = "SMS"
+                });
+                var numberDetails = numberSearchResult.numbers.First();
+
+                var buyResponse = Nexmo.Api.Number.Buy(countryCode, numberDetails.msisdn);
+
+                if(buyResponse.ErrorCode != "200")
+                {
+                    // something went wrong
+                }
+ 
+                ideaModel.CommentPhoneNumber = numberDetails.msisdn;
+
                 db.IdeaModels.Add(ideaModel);
                 db.SaveChanges();
                 return RedirectToAction("Index");

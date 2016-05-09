@@ -4,6 +4,7 @@ using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace realtime_idea_space.Controllers
@@ -43,25 +44,71 @@ namespace realtime_idea_space.Controllers
         // POST: Comment/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,IdeaModelId,Text,Created,CommentByUserId")] CommentModel ideaComment)
+        public ActionResult Create([Bind(Include = "Id,IdeaModelId,Text,Created,CommentByUserId")] CommentModel comment)
         {
-            if(ideaComment.CommentByUserId != User.Identity.GetUserId())
+            if(comment.CommentByUserId != User.Identity.GetUserId())
             {
                 ModelState.AddModelError("CommentByUserId", "The User Id did not match the logged in user");
             }
 
             if (ModelState.IsValid)
             {
-                ideaComment.Id = Guid.NewGuid();
-                db.IdeaComments.Add(ideaComment);
+                comment.Id = Guid.NewGuid();
+                db.IdeaComments.Add(comment);
                 db.SaveChanges();
 
-                Hubs.CommentHub.NewCommentAdded(ideaComment);
+                Hubs.CommentHub.NewCommentAdded(comment);
 
-                return RedirectToAction("Details", "Idea", new { Id = ideaComment.IdeaModelId });
+                return RedirectToAction("Details", "Idea", new { Id = comment.IdeaModelId });
             }
 
-            return View("Create", ideaComment);
+            return View("Create", comment);
+        }
+
+        public ActionResult SmsWebhook()
+        {
+            var fromNumber = Request["msisdn"];
+            string commentPhoneNumber = Request["to"];
+            var text = Request["text"];
+
+            var fromUser = db.Users.First(user => user.PhoneNumber == fromNumber);
+
+            // If there isn't a user registered with this phone number then we'll
+            // treat the comment as anonymous. We can use a check to see if the
+            // UserID is a GUID. If not, they're anonymous.
+            string fromUserId = (fromUser != null ? fromUser.Id : fromNumber);
+
+            Guid ideaId = db.IdeaModels.First(idea => idea.CommentPhoneNumber == commentPhoneNumber).Id;
+
+            var comment = new CommentModel
+            {
+                CommentByUserId = fromUserId,
+                Text = text,
+                Id = Guid.NewGuid(),
+                IdeaModelId = ideaId,
+                Created = DateTime.Now
+            };
+            db.IdeaComments.Add(comment);
+
+            try
+            {
+                db.SaveChanges();
+
+                Hubs.CommentHub.NewCommentAdded(comment);
+            }
+            catch(Exception ex)
+            {
+                Nexmo.Api.SMS.Send(new Nexmo.Api.SMS.SMSRequest
+                {
+                    to = fromNumber,
+                    text = string.Format(
+                        "Sorry, an exception occurred when handling your text: {0}", ex.Message
+                        ),
+                    from = WebConfigurationManager.AppSettings["NexmoFromNumber"]
+                });
+            }
+
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         // GET: Comment/Edit/5

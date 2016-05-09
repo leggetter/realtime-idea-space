@@ -240,6 +240,14 @@
     <Compile Include="Migrations\201605071602232_IdeaComment.IdeaModelId.Designer.cs">
       <DependentUpon>201605071602232_IdeaComment.IdeaModelId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605091308354_CommentPhoneNumber.cs" />
+    <Compile Include="Migrations\201605091308354_CommentPhoneNumber.Designer.cs">
+      <DependentUpon>201605091308354_CommentPhoneNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605092108529_Text.cs" />
+    <Compile Include="Migrations\201605092108529_Text.Designer.cs">
+      <DependentUpon>201605092108529_Text.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CommentModel.cs" />
@@ -317,11 +325,11 @@
     <Content Include="Views\Idea\Details.cshtml" />
     <Content Include="Views\Idea\Edit.cshtml" />
     <Content Include="Views\Idea\Index.cshtml" />
-    <Content Include="Views\IdeaComments\Create.cshtml" />
-    <Content Include="Views\IdeaComments\Delete.cshtml" />
-    <Content Include="Views\IdeaComments\Details.cshtml" />
-    <Content Include="Views\IdeaComments\Edit.cshtml" />
-    <Content Include="Views\IdeaComments\Index.cshtml" />
+    <Content Include="Views\Comment\Create.cshtml" />
+    <Content Include="Views\Comment\Delete.cshtml" />
+    <Content Include="Views\Comment\Details.cshtml" />
+    <Content Include="Views\Comment\Edit.cshtml" />
+    <Content Include="Views\Comment\Index.cshtml" />
     <Content Include="Views\Shared\CreateComment.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +361,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605071602232_IdeaComment.IdeaModelId.resx">
       <DependentUpon>201605071602232_IdeaComment.IdeaModelId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605091308354_CommentPhoneNumber.resx">
+      <DependentUpon>201605091308354_CommentPhoneNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605092108529_Text.resx">
+      <DependentUpon>201605092108529_Text.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
