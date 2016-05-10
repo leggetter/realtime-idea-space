@@ -188,7 +188,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Hubs\CommentHub.cs" />
     <Compile Include="Migrations\201605061745366_InitialCreate.cs" />
     <Compile Include="Migrations\201605061745366_InitialCreate.Designer.cs">
       <DependentUpon>201605061745366_InitialCreate.cs</DependentUpon>
@@ -305,6 +304,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Hubs\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

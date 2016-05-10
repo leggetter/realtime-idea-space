@@ -35,7 +35,7 @@ namespace realtime_idea_space.Controllers
                 db.IdeaComments.Add(comment);
                 db.SaveChanges();
 
-                Hubs.CommentHub.NewCommentAdded(comment);
+                // Real-time update
 
                 return RedirectToAction("Details", "Idea", new { Id = comment.IdeaModelId });
             }
@@ -45,39 +45,17 @@ namespace realtime_idea_space.Controllers
 
         public ActionResult SmsWebhook()
         {
-            var fromNumber = Request["msisdn"];
-            var commentPhoneNumber = Request["to"];
-            var text = Request["text"];
+            // fromNumber/msisdn, to, text
+            
+            // fromUser based on msidn/from
 
-            var fromUser = db.Users.First(user => user.PhoneNumber == fromNumber);
+            // fromUserId of user registered. Otherwise use fromNumber
 
-            // If there isn't a user registered with this phone number then we'll
-            // treat the comment as anonymous. We can use a check to see if the
-            // UserID is a GUID. If not, they're anonymous.
-            string fromUserId = (fromUser != null ? fromUser.Id : fromNumber);
+            // ideaId based on comment/to phone number
+            
+            // Create comment and save (catch exceptions, reply with SMS?)
 
-            Guid ideaId = db.IdeaModels.First(idea => idea.CommentPhoneNumber == commentPhoneNumber).Id;
-
-            var comment = new CommentModel(ideaId, text, fromUserId);
-            db.IdeaComments.Add(comment);
-
-            try
-            {
-                db.SaveChanges();
-
-                Hubs.CommentHub.NewCommentAdded(comment);
-            }
-            catch(Exception ex)
-            {
-                Nexmo.Api.SMS.Send(new Nexmo.Api.SMS.SMSRequest
-                {
-                    to = fromNumber,
-                    text = string.Format(
-                        "Sorry, an exception occurred when handling your text: {0}", ex.Message
-                        ),
-                    from = Config.NexmoFromNumber
-                });
-            }
+            // Real-time update
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }

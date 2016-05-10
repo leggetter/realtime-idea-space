@@ -4,6 +4,8 @@ SETUP
 
 * Connect mobile and use Vysor to show UI.
 
+* Copy things to clipboard including phone number: 40799337092
+
 
 OVERVIEW
 
@@ -34,6 +36,12 @@ public static void NewCommentAdded(CommentModel comment)
 	var hubContext = GlobalHost.ConnectionManager.GetHubContext<CommentHub>();
 	hubContext.Clients.All.AddNewComment(comment);
 }
+```
+
+* Update `CommentController.Create` to call the CommentHub method after save.
+
+```
+Hubs.CommentHub.NewCommentAdded(comment);
 ```
 
 * Add scripts section in stages to `Idea\Details.cshtml`:
@@ -93,6 +101,8 @@ SMS is pretty real-time and is available to everybody. So let's add the ability 
 
 * Uncomment the number provisioning code in `IdeaController.cs`
 
+* Show `CreateComment.cshtml`
+
 * When an SMS is sent to that number we want our application to know about it. For local development I'm using ngrok as a localtunnel that exposes my own machine.
 
 * Show `CommentController` and `SmsWebhook` route.
@@ -144,3 +154,5 @@ catch(Exception ex)
 ```
 Hubs.CommentHub.NewCommentAdded(comment);
 ```
+
+PUBNUB

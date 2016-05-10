@@ -12,7 +12,7 @@ namespace realtime_idea_space.Models
         public CommentModel() { Id = Guid.NewGuid(); Created = DateTime.Now; }
 
         public CommentModel(Guid ideaModelId, string text, string commentByUserId):
-            base()
+            this()
         {
             IdeaModelId = ideaModelId;
             Text = text;
@@ -43,6 +43,7 @@ namespace realtime_idea_space.Models
         public string Text { get; set; }
 
         [ScaffoldColumn(false)]
+        [DataType(DataType.DateTime)]
         public DateTime Created { get; set; }
 
         [Required]
