@@ -8,10 +8,18 @@ namespace realtime_idea_space
 {
     public static class Config
     {
-        public static string CountryCode {
+        public static string BuyNumberCountryCode {
             get
             {
                 return WebConfigurationManager.AppSettings["Nexmo.BuyNumberCountry"] ?? "GB";
+            }
+        }
+
+        public static string NexmoFromNumber
+        {
+            get
+            {
+                return WebConfigurationManager.AppSettings["Nexmo.FromNumber"];
             }
         }
     }

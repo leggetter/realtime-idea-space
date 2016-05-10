@@ -19,28 +19,6 @@ namespace realtime_idea_space.Controllers
             return View(db.IdeaComments.ToList());
         }
 
-        // GET: Comment/Details/5
-        public ActionResult Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CommentModel ideaComment = db.IdeaComments.Find(id);
-            if (ideaComment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ideaComment);
-        }
-
-        // Used by Create
-        public PartialViewResult CreateComment([Bind(Include = "IdeaModelId")] CommentModel ideaComment)
-        {
-            ideaComment.CommentByUserId = User.Identity.GetUserId();
-            return PartialView("CreateComment", ideaComment);
-        }
-
         // POST: Comment/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -104,11 +82,33 @@ namespace realtime_idea_space.Controllers
                     text = string.Format(
                         "Sorry, an exception occurred when handling your text: {0}", ex.Message
                         ),
-                    from = WebConfigurationManager.AppSettings["NexmoFromNumber"]
+                    from = Config.NexmoFromNumber
                 });
             }
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        // GET: Comment/Details/5
+        public ActionResult Details(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            CommentModel ideaComment = db.IdeaComments.Find(id);
+            if (ideaComment == null)
+            {
+                return HttpNotFound();
+            }
+            return View(ideaComment);
+        }
+
+        // Used by Create
+        public PartialViewResult CreateComment([Bind(Include = "IdeaModelId")] CommentModel ideaComment)
+        {
+            ideaComment.CommentByUserId = User.Identity.GetUserId();
+            return PartialView("CreateComment", ideaComment);
         }
 
         // GET: Comment/Edit/5

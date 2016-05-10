@@ -31,7 +31,7 @@ namespace realtime_idea_space
         {
             var result = Nexmo.Api.SMS.Send(new Nexmo.Api.SMS.SMSRequest
             {
-                from = WebConfigurationManager.AppSettings["NexmoFromNumber"],
+                from = Config.NexmoFromNumber,
                 to = message.Destination,
                 text = message.Body + " [Powered by Nexmo]"
             });

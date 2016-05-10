@@ -54,21 +54,20 @@ namespace realtime_idea_space.Controllers
             {
                 ideaModel.Id = Guid.NewGuid();
 
-                var countryCode = WebConfigurationManager.AppSettings["Nexmo.BuyNumberCountry"] ?? "GB";
-
-                var numberSearchResult = Nexmo.Api.Number.Search(new Nexmo.Api.Number.SearchRequest{
-                    country = countryCode,
+                var numberSearchResult = Nexmo.Api.Number.Search(new Nexmo.Api.Number.SearchRequest
+                {
+                    country = Config.BuyNumberCountryCode,
                     features = "SMS"
                 });
                 var numberDetails = numberSearchResult.numbers.First();
 
-                var buyResponse = Nexmo.Api.Number.Buy(countryCode, numberDetails.msisdn);
+                var buyResponse = Nexmo.Api.Number.Buy(Config.BuyNumberCountryCode, numberDetails.msisdn);
 
-                if(buyResponse.ErrorCode != "200")
+                if (buyResponse.ErrorCode != "200")
                 {
                     // something went wrong
                 }
- 
+
                 ideaModel.CommentPhoneNumber = numberDetails.msisdn;
 
                 db.IdeaModels.Add(ideaModel);
