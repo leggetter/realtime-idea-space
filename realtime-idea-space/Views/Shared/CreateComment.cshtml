@@ -12,7 +12,10 @@
         <div class="form-group">
             <div class="control-label col-md-2">
                 @Html.LabelFor(model => model.Text)
+                @if (Model.ParentIdeaModel.CommentPhoneNumber != null)
+                {
                 <div>Or comment by SMS: <strong>@Model.ParentIdeaModel.CommentPhoneNumber</strong></div>
+                }
             </div>
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Text, new { htmlAttributes = new { @class = "form-control" } })
