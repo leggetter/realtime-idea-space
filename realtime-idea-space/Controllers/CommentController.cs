@@ -46,7 +46,7 @@ namespace realtime_idea_space.Controllers
         public ActionResult SmsWebhook()
         {
             var fromNumber = Request["msisdn"];
-            string commentPhoneNumber = Request["to"];
+            var commentPhoneNumber = Request["to"];
             var text = Request["text"];
 
             var fromUser = db.Users.First(user => user.PhoneNumber == fromNumber);
@@ -58,14 +58,7 @@ namespace realtime_idea_space.Controllers
 
             Guid ideaId = db.IdeaModels.First(idea => idea.CommentPhoneNumber == commentPhoneNumber).Id;
 
-            var comment = new CommentModel
-            {
-                CommentByUserId = fromUserId,
-                Text = text,
-                Id = Guid.NewGuid(),
-                IdeaModelId = ideaId,
-                Created = DateTime.Now
-            };
+            var comment = new CommentModel(ideaId, text, fromUserId);
             db.IdeaComments.Add(comment);
 
             try

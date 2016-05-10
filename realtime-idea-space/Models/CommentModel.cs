@@ -11,6 +11,14 @@ namespace realtime_idea_space.Models
 
         public CommentModel() { Id = Guid.NewGuid(); Created = DateTime.Now; }
 
+        public CommentModel(Guid ideaModelId, string text, string commentByUserId):
+            base()
+        {
+            IdeaModelId = ideaModelId;
+            Text = text;
+            CommentByUserId = commentByUserId;
+        }
+
         public Guid Id { get; set; }
 
         public Guid IdeaModelId { get; set; }
