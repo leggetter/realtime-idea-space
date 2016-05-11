@@ -22,5 +22,22 @@ namespace realtime_idea_space
                 return WebConfigurationManager.AppSettings["Nexmo.FromNumber"];
             }
         }
+
+        public static string PubNubPublishKey
+        {
+            get
+            {
+                return WebConfigurationManager.AppSettings["PubNub.PublishKey"];
+            }
+        }
+
+        public static string PubNubSubscribeKey
+        {
+            get
+            {
+                return WebConfigurationManager.AppSettings["PubNub.SubscribeKey"];
+            }
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using PubNubMessaging.Core;
 using realtime_idea_space.Hubs;
 using realtime_idea_space.Models;
 using System;
@@ -37,7 +38,7 @@ namespace realtime_idea_space.Controllers
                 db.SaveChanges();
 
                 // Real-time update
-                CommentHub.NewCommmentAdded(comment);
+                PublishUpdate(comment);
 
                 return RedirectToAction("Details", "Idea", new { Id = comment.IdeaModelId });
             }
@@ -72,9 +73,24 @@ namespace realtime_idea_space.Controllers
             // Erros?!
 
             // Real-time update
-            CommentHub.NewCommmentAdded(comment);
+            //CommentHub.NewCommmentAdded(comment);
+            PublishUpdate(comment);
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        private void PublishUpdate( CommentModel comment)
+        {
+            Pubnub pubnub = new Pubnub(
+                Config.PubNubPublishKey,
+                Config.PubNubSubscribeKey
+            );
+            pubnub.Publish(
+                comment.IdeaModelId.ToString(),
+                comment,
+                (string result) => { },
+                (PubnubClientError e) => { }
+            );
         }
 
         // GET: Comment/Details/5
