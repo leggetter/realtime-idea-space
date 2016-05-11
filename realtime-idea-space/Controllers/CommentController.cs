@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using realtime_idea_space.Hubs;
 using realtime_idea_space.Models;
 using System;
 using System.Data.Entity;
@@ -36,6 +37,7 @@ namespace realtime_idea_space.Controllers
                 db.SaveChanges();
 
                 // Real-time update
+                CommentHub.NewCommmentAdded(comment);
 
                 return RedirectToAction("Details", "Idea", new { Id = comment.IdeaModelId });
             }
@@ -46,16 +48,31 @@ namespace realtime_idea_space.Controllers
         public ActionResult SmsWebhook()
         {
             // fromNumber/msisdn, to, text
-            
-            // fromUser based on msidn/from
+            var fromNumber = Request["msisdn"];
+            var commentPhoneNumber = Request["to"];
+            var text = Request["text"];
 
-            // fromUserId of user registered. Otherwise use fromNumber
 
-            // ideaId based on comment/to phone number
-            
-            // Create comment and save (catch exceptions, reply with SMS?)
+            // Determine the user who has sent the SMS based on their phone number.
+            // The result of this could be `null`
+            var fromUser = db.Users.First(user => user.PhoneNumber == fromNumber);
+
+            // If there isn't a user registered with this phone number then we'll
+            // treat the comment as anonymous. We can use a check to see if the
+            // UserID is a GUID. If not, they're anonymous.
+            string fromUserId = (fromUser != null ? fromUser.Id : fromNumber);
+
+            // Get the Idea that the comment is related to
+            Guid ideaId = db.IdeaModels.First(idea => idea.CommentPhoneNumber == commentPhoneNumber).Id;
+
+            var comment = new CommentModel(ideaId, text, fromUserId);
+            db.IdeaComments.Add(comment);
+            db.SaveChanges();
+
+            // Erros?!
 
             // Real-time update
+            CommentHub.NewCommmentAdded(comment);
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }

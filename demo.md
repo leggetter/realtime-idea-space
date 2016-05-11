@@ -118,21 +118,20 @@ var text = Request["text"];
 * Get required info from the DB: from user based on number, work out from Id from there.
 
 ```
+// Determine the user who has sent the SMS based on their phone number.
+// The result of this could be `null`
 var fromUser = db.Users.First(user => user.PhoneNumber == fromNumber);
 
 // If there isn't a user registered with this phone number then we'll
 // treat the comment as anonymous. We can use a check to see if the
 // UserID is a GUID. If not, they're anonymous.
 string fromUserId = (fromUser != null ? fromUser.Id : fromNumber);
-```
 
-* Get IdeaId based on the to/comment phone number
-
-```
+// Get the Idea that the comment is related to
 Guid ideaId = db.IdeaModels.First(idea => idea.CommentPhoneNumber == commentPhoneNumber).Id;
 ```
 
-* Create comment, save and catch
+* Create and Save the comment
 
 ```
 var comment = new CommentModel(ideaId, text, fromUserId);

@@ -9,6 +9,7 @@ namespace realtime_idea_space
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+            app.MapSignalR();
         }
     }
 }
